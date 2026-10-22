@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { api, labels, typeMarks, uid } from '../api';
 import QuestionEditor from '../components/QuestionEditor.vue';
-import { previewRouting, modeLabel, type Routing, type UpgradePreview } from '../routing';
+import { previewRouting, type Routing } from '../routing';
 import type { Definition, QuestionType } from '../../../api/src/domain';
 const route = useRoute(),
   router = useRouter();
@@ -26,82 +26,8 @@ const routing = computed(() =>
     : null,
 );
 const routingById = computed(() => new Map(routing.value?.questions.map((q) => [q.questionId, q])));
-const upgradePreview = ref<UpgradePreview | null>(null);
-const upgradeOpen = ref(false),
-  upgradeAcknowledged = ref(false),
-  upgradeError = ref('');
-function questionName(id: string | null) {
-  const index = definition.value?.questions.findIndex((q) => q.id === id) ?? -1;
-  return index < 0
-    ? '缺少入口'
-    : `第 ${String(index + 1).padStart(2, '0')} 题 · ${definition.value!.questions[index].title || '未命名题目'}`;
-}
-function planQuestionName(plan: Routing, id: string | null) {
-  const index = plan.questions.findIndex((q) => q.questionId === id);
-  return index < 0
-    ? '缺少入口'
-    : `第 ${String(index + 1).padStart(2, '0')} 题 · ${plan.questions[index].title || '未命名题目'}`;
-}
 async function refreshRouting() {
   serverRouting.value = await api('/surveys/' + route.params.id + '/routing');
-}
-async function previewUpgrade() {
-  if (busy.value || locked.value) return;
-  if (dirty.value) {
-    ElMessage.warning('请先保存草稿，再预览升级；预览仅针对已保存的规则。');
-    return;
-  }
-  busy.value = true;
-  upgradeAcknowledged.value = false;
-  upgradePreview.value = null;
-  upgradeError.value = '';
-  try {
-    upgradePreview.value = await api('/surveys/' + route.params.id + '/routing/upgrade-preview');
-    upgradeOpen.value = true;
-  } catch (e: any) {
-    ElMessage.error(e.message);
-  } finally {
-    busy.value = false;
-  }
-}
-async function confirmUpgrade() {
-  const preview = upgradePreview.value;
-  if (busy.value || !preview?.canUpgrade || !upgradeAcknowledged.value || dirty.value) return;
-  busy.value = true;
-  upgradeError.value = '';
-  try {
-    const result = await api('/surveys/' + route.params.id + '/routing/upgrade', 'POST', {
-      revision: preview.revision,
-      targetMode: 'exclusive-branches-v1',
-      acknowledgedBranchQuestionIds: [...new Set(preview.after.branchQuestionIds)],
-    });
-    survey.value = result.survey;
-    definition.value = structuredClone(result.survey.draft);
-    serverRouting.value = result.routing;
-    savedDefinition.value = JSON.stringify(definition.value);
-    upgradeOpen.value = false;
-    ElMessage.success('跳转机制已升级，请检查分支与入口后再发布');
-  } catch (e: any) {
-    upgradeError.value = e.message;
-    upgradeAcknowledged.value = false;
-    if (e.code === 'CONFLICT' || e.code === 'ROUTING_ACK_REQUIRED') {
-      upgradePreview.value = null;
-      try {
-        upgradePreview.value = await api(
-          '/surveys/' + route.params.id + '/routing/upgrade-preview',
-        );
-        ElMessage.warning(
-          e.code === 'CONFLICT'
-            ? '数据已变化，已重新获取预览，请重新审阅并确认。'
-            : '分支确认集合已变化，请重新审阅完整分支列表。',
-        );
-      } catch (refreshError: any) {
-        ElMessage.error(refreshError.message);
-      }
-    } else ElMessage.error(e.message);
-  } finally {
-    busy.value = false;
-  }
 }
 const settingsOpen = ref(false),
   canvas = ref<HTMLElement | null>(null),
@@ -381,33 +307,13 @@ async function copy() {
         </div>
       </aside>
       <div class="editor-main">
-        <div
-          v-if="routing"
-          class="routing-overview"
-          :class="{ 'routing-invalid': !routing.entryQuestionId }"
-          role="status"
-        >
-          <span>
-            <b>{{ modeLabel(routing.routingMode) }}</b>
-            <small>{{ routing.routingMode }}</small>
-          </span>
-          <span>
-            {{
-              routing.entryQuestionId
-                ? '入口：' + questionName(routing.entryQuestionId)
-                : '缺少填写入口：请至少保留一道通用题（NO_ENTRY）'
-            }}
-          </span>
-          <small>{{ dirty ? '未保存规则的即时预览' : '服务端分类' }}</small>
-          <el-button
-            v-if="!locked && routing.routingMode === 'legacy-v1'"
-            text
-            :disabled="busy"
-            @click="previewUpgrade"
-          >
-            升级跳转机制
-          </el-button>
-        </div>
+        <el-alert
+          v-if="routing && !routing.entryQuestionId && definition.questions.length"
+          title="缺少填写入口：请至少保留一道通用题。"
+          type="error"
+          :closable="false"
+          class="routing-entry-error"
+        />
         <section :class="['editor-survey-settings', { 'is-expanded': settingsOpen }]">
           <button
             class="settings-toggle"
@@ -517,70 +423,6 @@ async function copy() {
         </div>
       </div>
     </div>
-    <el-dialog
-      v-model="upgradeOpen"
-      title="升级跳转机制"
-      width="620px"
-      :close-on-click-modal="false"
-      :close-on-press-escape="!busy"
-      :show-close="!busy"
-    >
-      <template v-if="upgradePreview">
-        <p>
-          {{ modeLabel(upgradePreview.before.routingMode) }}（{{
-            upgradePreview.before.routingMode
-          }}） → {{ modeLabel(upgradePreview.after.routingMode) }}（{{
-            upgradePreview.after.routingMode
-          }}）
-        </p>
-        <p>
-          升级后入口：{{
-            planQuestionName(upgradePreview.after, upgradePreview.after.entryQuestionId)
-          }}
-        </p>
-        <p>{{ upgradePreview.warning }}</p>
-        <p>
-          <strong>
-            以下为升级后的完整分支列表。这些题不能再顺序进入，只能通过条件跳转进入；分支不会自动组成连续题组。
-          </strong>
-        </p>
-        <ul class="upgrade-branches">
-          <li v-for="id in upgradePreview.after.branchQuestionIds" :key="id">
-            {{ planQuestionName(upgradePreview.after, id) }}
-            <small v-if="upgradePreview.newlyExclusiveQuestionIds.includes(id)">
-              · 将变为专属分支
-            </small>
-          </li>
-          <li v-if="!upgradePreview.after.branchQuestionIds.length">
-            无分支题，所有题仍为通用题。
-          </li>
-        </ul>
-        <el-alert
-          v-for="(issue, i) in upgradePreview.errors"
-          :key="i"
-          type="error"
-          :closable="false"
-          :title="issue.code + '：' + issue.message"
-        />
-        <p v-if="!upgradePreview.canUpgrade">当前草稿无法升级，请根据以上原因修改后重新预览。</p>
-        <el-checkbox v-model="upgradeAcknowledged" :disabled="!upgradePreview.canUpgrade || busy">
-          我已审阅入口与完整分支列表，确认升级
-        </el-checkbox>
-      </template>
-      <p v-else>预览不可用，请关闭后重新获取。</p>
-      <el-alert v-if="upgradeError" :title="upgradeError" type="error" :closable="false" />
-      <template #footer>
-        <el-button :disabled="busy" @click="upgradeOpen = false">取消</el-button>
-        <el-button
-          type="primary"
-          :loading="busy"
-          :disabled="!upgradePreview?.canUpgrade || !upgradeAcknowledged || dirty"
-          @click="confirmUpgrade"
-        >
-          确认升级
-        </el-button>
-      </template>
-    </el-dialog>
   </div>
   <div v-else-if="loadError" class="empty">
     <p>{{ loadError }}</p>

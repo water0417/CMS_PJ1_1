@@ -1,0 +1,168 @@
+{
+  "checkedAt": "2026-10-22T15:58:44.099Z",
+  "source": "只读核对本机用户确认的发布问卷；不导出原始答卷或身份标识",
+  "title": "今天是什么颜色呢",
+  "responseCount": 5,
+  "summary": [
+    {
+      "question": "Q1",
+      "title": "你的昵称？",
+      "type": "text",
+      "answered": 5
+    },
+    {
+      "question": "Q2",
+      "title": "今天的你开心吗",
+      "type": "single_choice",
+      "answered": 5,
+      "options": [
+        {
+          "label": "我很开心",
+          "count": 1
+        },
+        {
+          "label": "淡淡的",
+          "count": 2
+        },
+        {
+          "label": "我很难过",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "question": "Q3",
+      "title": "今天有什么开心的事情呀",
+      "type": "multiple_choice",
+      "answered": 1,
+      "options": [
+        {
+          "label": "和好朋友一起玩",
+          "count": 1
+        },
+        {
+          "label": "享受独处",
+          "count": 0
+        },
+        {
+          "label": "开心不需要理由",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "question": "Q4",
+      "title": "为什么难过呢",
+      "type": "multiple_choice",
+      "answered": 2,
+      "options": [
+        {
+          "label": "和朋友吵架了",
+          "count": 2
+        },
+        {
+          "label": "很孤单",
+          "count": 0
+        },
+        {
+          "label": "难过是常态",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "question": "Q5",
+      "title": "写下你想写的数字",
+      "type": "number",
+      "answered": 5,
+      "average": -18.8,
+      "min": -100,
+      "max": 5
+    },
+    {
+      "question": "Q6",
+      "title": "彩蛋！",
+      "type": "slider",
+      "answered": 2,
+      "average": 5.5,
+      "min": 1,
+      "max": 10
+    },
+    {
+      "question": "Q7",
+      "title": "调色魔法师",
+      "type": "matrix",
+      "answered": 5,
+      "rows": [
+        {
+          "label": "红",
+          "count": 5
+        },
+        {
+          "label": "黄",
+          "count": 5
+        },
+        {
+          "label": "蓝",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "question": "Q8",
+      "title": "此刻！",
+      "type": "time",
+      "answered": 5,
+      "dates": {
+        "2026-10-03": 1,
+        "2026-10-23": 1,
+        "2026-10-22": 2,
+        "2026-10-21": 1
+      }
+    },
+    {
+      "question": "Q9",
+      "title": "你看见？",
+      "type": "ranking",
+      "answered": 5,
+      "averageRanks": [
+        {
+          "label": "红",
+          "average": 4.6
+        },
+        {
+          "label": "粉",
+          "average": 2.8
+        },
+        {
+          "label": "橙",
+          "average": 2
+        },
+        {
+          "label": "黄",
+          "average": 4
+        },
+        {
+          "label": "绿",
+          "average": 5
+        },
+        {
+          "label": "蓝",
+          "average": 4.4
+        },
+        {
+          "label": "紫",
+          "average": 8.2
+        },
+        {
+          "label": "白",
+          "average": 7.6
+        },
+        {
+          "label": "黑",
+          "average": 6.4
+        }
+      ]
+    }
+  ]
+}

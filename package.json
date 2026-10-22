@@ -12,9 +12,14 @@
     "start": "npm run start -w apps/api",
     "test": "tsx --test tests/engine.test.ts tests/branch-routing.test.ts tests/frontend-routing.test.ts",
     "test:integration": "tsx tests/integration.ts",
+    "test:seed:manual": "tsx tests/manual-seed.ts",
     "db:init": "node scripts/init-db.cjs",
-    "seed": "tsx scripts/seed.ts",
+    "seed": "tsx scripts/seed-manual.ts",
+    "seed:manual": "tsx scripts/seed-manual.ts",
+    "seed:system": "tsx scripts/seed.ts",
     "routing:preview": "tsx scripts/preview-routing.ts",
+    "routing:migrate": "tsx scripts/migrate-system-routing.ts",
+    "routing:migrate:apply": "tsx scripts/migrate-system-routing.ts --apply",
     "format": "prettier --write \"apps/**/*.{ts,vue,css,json,html}\" \"tests/*.ts\" \"scripts/*.{ts,cjs}\" \"docs/*.md\" README.md"
   },
   "devDependencies": {

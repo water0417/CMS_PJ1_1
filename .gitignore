@@ -10,5 +10,11 @@ test-results/*
 !test-results/release-integration.txt
 !test-results/integration.json
 !test-results/README.md
+!test-results/manual-seed.json
+!test-results/manual-seed-test.txt
+!test-results/manual-verification.json
+!test-results/final-unit.txt
+!test-results/final-build.txt
+!test-results/final-integration.txt
 .DS_Store
 Thumbs.db

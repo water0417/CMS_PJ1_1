@@ -1,0 +1,252 @@
+{
+  "title": "今天是什么颜色呢",
+  "description": "",
+  "allowAnonymous": true,
+  "allowRepeatSubmissions": false,
+  "questions": [
+    {
+      "id": "a0abe6aa2aa64d11",
+      "type": "text",
+      "title": "你的昵称？",
+      "description": "",
+      "required": true,
+      "options": [],
+      "rows": [],
+      "validation": {
+        "minLength": 1,
+        "maxLength": 10,
+        "format": "none"
+      },
+      "jumpRules": []
+    },
+    {
+      "id": "7b2209f5f64545ac",
+      "type": "single_choice",
+      "title": "今天的你开心吗",
+      "description": "",
+      "required": true,
+      "options": [
+        {
+          "id": "62ba817f03ea4647",
+          "label": "我很开心"
+        },
+        {
+          "id": "191f6fad8ef749b2",
+          "label": "淡淡的"
+        },
+        {
+          "id": "cfd972be9d2c4771",
+          "label": "我很难过"
+        }
+      ],
+      "rows": [],
+      "validation": {},
+      "jumpRules": [
+        {
+          "id": "2a171e48dea649a5",
+          "operator": "eq",
+          "value": "62ba817f03ea4647",
+          "target": "7f282044172943ec"
+        },
+        {
+          "id": "0ebed948ec204d61",
+          "operator": "eq",
+          "value": "cfd972be9d2c4771",
+          "target": "dcdc224719c9489d"
+        }
+      ]
+    },
+    {
+      "id": "7f282044172943ec",
+      "type": "multiple_choice",
+      "title": "今天有什么开心的事情呀",
+      "description": "",
+      "required": true,
+      "options": [
+        {
+          "id": "75733623fa2a4f0a",
+          "label": "和好朋友一起玩"
+        },
+        {
+          "id": "33b887d615a14404",
+          "label": "享受独处"
+        },
+        {
+          "id": "8cb30af214214d9d",
+          "label": "开心不需要理由"
+        }
+      ],
+      "rows": [],
+      "validation": {
+        "minSelections": 1,
+        "maxSelections": 3
+      },
+      "jumpRules": []
+    },
+    {
+      "id": "dcdc224719c9489d",
+      "type": "multiple_choice",
+      "title": "为什么难过呢",
+      "description": "",
+      "required": true,
+      "options": [
+        {
+          "id": "6590617a488746be",
+          "label": "和朋友吵架了"
+        },
+        {
+          "id": "60ddce042c61455f",
+          "label": "很孤单"
+        },
+        {
+          "id": "585490d88ea646b9",
+          "label": "难过是常态"
+        }
+      ],
+      "rows": [],
+      "validation": {
+        "minSelections": 1,
+        "maxSelections": 3
+      },
+      "jumpRules": []
+    },
+    {
+      "id": "ffa75382603b4cea",
+      "type": "number",
+      "title": "写下你想写的数字",
+      "description": "-100到100",
+      "required": true,
+      "options": [],
+      "rows": [],
+      "validation": {
+        "min": -100,
+        "max": 100
+      },
+      "jumpRules": [
+        {
+          "id": "09ea51c799b14e4e",
+          "operator": "eq",
+          "value": 0,
+          "target": "1ff10ba0bcf64751"
+        }
+      ]
+    },
+    {
+      "id": "1ff10ba0bcf64751",
+      "type": "slider",
+      "title": "彩蛋！",
+      "description": "",
+      "required": true,
+      "options": [],
+      "rows": [],
+      "validation": {
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "lowLabel": "没意思...",
+        "highLabel": "喜欢！"
+      },
+      "jumpRules": []
+    },
+    {
+      "id": "61e9e2ad42c3469d",
+      "type": "matrix",
+      "title": "调色魔法师",
+      "description": "",
+      "required": true,
+      "options": [
+        {
+          "id": "d2575fffe09841e6",
+          "label": "红"
+        },
+        {
+          "id": "8546949224dd4524",
+          "label": "黄"
+        },
+        {
+          "id": "569a8c7d05e84dfb",
+          "label": "蓝"
+        }
+      ],
+      "rows": [
+        {
+          "id": "cb7b4f60c8544e66",
+          "label": "红"
+        },
+        {
+          "id": "3f039e6e3f674d36",
+          "label": "黄"
+        },
+        {
+          "id": "f4d1d16363e74d83",
+          "label": "蓝"
+        }
+      ],
+      "validation": {},
+      "jumpRules": []
+    },
+    {
+      "id": "21bf55c768174767",
+      "type": "time",
+      "title": "此刻！",
+      "description": "",
+      "required": true,
+      "options": [],
+      "rows": [],
+      "validation": {
+        "mode": "date"
+      },
+      "jumpRules": []
+    },
+    {
+      "id": "7c8cc2cea777471b",
+      "type": "ranking",
+      "title": "你看见？",
+      "description": "",
+      "required": true,
+      "options": [
+        {
+          "id": "66d7448bf1a94242",
+          "label": "红"
+        },
+        {
+          "id": "8bda95e900104e8c",
+          "label": "粉"
+        },
+        {
+          "id": "db5b3ca754034e0c",
+          "label": "橙"
+        },
+        {
+          "id": "f3104aa08cd84208",
+          "label": "黄"
+        },
+        {
+          "id": "63959b19b4484d13",
+          "label": "绿"
+        },
+        {
+          "id": "d132603b044b4089",
+          "label": "蓝"
+        },
+        {
+          "id": "f38b1c9b8ff647ba",
+          "label": "紫"
+        },
+        {
+          "id": "1fef6d6610634bdf",
+          "label": "白"
+        },
+        {
+          "id": "86072bc16c334649",
+          "label": "黑"
+        }
+      ],
+      "rows": [],
+      "validation": {},
+      "jumpRules": []
+    }
+  ],
+  "schemaVersion": 1,
+  "routingMode": "exclusive-branches-v1"
+}

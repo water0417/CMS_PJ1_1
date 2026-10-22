@@ -1103,6 +1103,74 @@ async function main() {
       const ids = new Set(list.map((s: any) => s._id));
       assert.ok(otherList.every((s: any) => !ids.has(s._id)));
     });
+    await check('工作区删除草稿：归属、登录、版本冲突和软删除保留', async () => {
+      const s = await owner.request('/surveys', 'POST', { title: '删除验收草稿' }, 201);
+      const url = '/surveys/' + s._id;
+      await other.request(url, 'DELETE', { revision: s.revision }, 404);
+      await new Client().request(url, 'DELETE', { revision: s.revision }, 401);
+      await owner.request(url, 'DELETE', {}, 400);
+      await owner.request(url, 'DELETE', { revision: s.revision + 1 }, 409);
+      assert.ok((await owner.request('/surveys')).some((x: any) => x._id === s._id));
+      assert.equal((await owner.request(url, 'DELETE', { revision: s.revision })).ok, true);
+      await owner.request(url, 'GET', undefined, 404);
+      await owner.request(url, 'DELETE', { revision: s.revision }, 404);
+      assert.ok(!(await owner.request('/surveys')).some((x: any) => x._id === s._id));
+      const stored = await db
+        .collection('surveys')
+        .findOne({ _id: new mongoose.Types.ObjectId(s._id) });
+      assert.ok(stored?.deletedAt);
+      assert.equal(stored!.draft.title, s.draft.title);
+    });
+    await check('删除发布及关闭问卷：隐藏链接、填写和统计，保留答卷快照与其他问卷', async () => {
+      const s = await publish(definition([q('delete_q', 'text')], true));
+      const completed = await fillSaved(await begin(s), { delete_q: '保留的答卷内容' });
+      await writer.request(
+        '/attempts/' + completed.id + '/submit',
+        'POST',
+        { revision: completed.state.revision },
+        201,
+      );
+      const active = await begin(s);
+      const before = await db.collection('responses').countDocuments({ surveyId: s._id });
+      await owner.request('/surveys/' + s._id, 'DELETE', { revision: s.revision });
+      await writer.request('/public/surveys/' + s.publicId, 'GET', undefined, 404);
+      await writer.request(
+        '/public/surveys/' + s.publicId + '/attempts',
+        'POST',
+        { anonymous: true },
+        404,
+      );
+      await writer.request('/attempts/' + active.id, 'GET', undefined, 404);
+      await writer.request(
+        '/attempts/' + active.id + '/advance',
+        'POST',
+        { revision: active.state.revision, answer: '不能继续' },
+        404,
+      );
+      await writer.request(
+        '/attempts/' + active.id + '/submit',
+        'POST',
+        { revision: active.state.revision },
+        404,
+      );
+      for (const suffix of ['/statistics', '/routing'])
+        await owner.request('/surveys/' + s._id + suffix, 'GET', undefined, 404);
+      assert.equal(await db.collection('responses').countDocuments({ surveyId: s._id }), before);
+      assert.ok(
+        await db
+          .collection('survey_versions')
+          .findOne({ _id: new mongoose.Types.ObjectId(s.publishedVersionId) }),
+      );
+      const closed = await publish(definition([q('close_q', 'text')], true));
+      const closedSurvey = await owner.request(
+        '/surveys/' + closed._id + '/close',
+        'POST',
+        undefined,
+        201,
+      );
+      await owner.request('/surveys/' + closed._id, 'DELETE', { revision: closedSurvey.revision });
+      assert.ok((await owner.request('/surveys')).length > 0);
+    });
     console.log(`集成测试 ${results.length}/${results.length} 通过，数据库 ${dbName}`);
   } finally {
     fs.mkdirSync('test-results', { recursive: true });

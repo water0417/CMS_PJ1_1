@@ -1204,35 +1204,13 @@
 }
 
 /* Give the collapsible settings a clearer neutral-gray hierarchy. */
-.routing-overview {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 5px 12px;
-  padding: 7px 10px;
-  border: 1px solid #c8c8c8;
-  background: #ededed;
-  color: #454545;
-  font:
-    11px/1.5 'Microsoft YaHei',
-    sans-serif;
+.routing-entry-error {
   flex-shrink: 0;
   margin-bottom: 7px;
 }
-.routing-overview small,
 .fill-routing-note {
   color: #666;
   font-size: 10px;
-}
-.routing-overview .el-button {
-  margin-left: auto;
-  padding: 0;
-  height: auto;
-  font-size: 11px;
-}
-.routing-invalid {
-  border-color: #555;
-  font-weight: 600;
 }
 .continuous-editor .routing-badge {
   display: inline-block;
@@ -1260,12 +1238,6 @@
 .branch-explanation > span {
   display: block;
   color: #707070;
-}
-.upgrade-branches {
-  max-height: 220px;
-  overflow: auto;
-  padding-left: 24px;
-  line-height: 1.9;
 }
 .continuous-editor .settings-toggle,
 .continuous-editor .logic-summary {

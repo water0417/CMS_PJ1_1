@@ -90,13 +90,13 @@ export async function me(id: string) {
   return { id: String(u._id), username: u.username };
 }
 export async function owned(id: string, userId: string) {
-  const s = await Survey.findOne({ _id: objectId(id), ownerId: userId }).lean();
+  const s = await Survey.findOne({ _id: objectId(id), ownerId: userId, deletedAt: null }).lean();
   if (!s) throw new DomainError('NOT_FOUND', '问卷不存在或无权访问', 404);
   return s;
 }
 export async function listSurveys(userId: string) {
   const surveys = await Survey.aggregate([
-    { $match: { ownerId: userId } },
+    { $match: { ownerId: userId, deletedAt: null } },
     { $sort: { createdAt: -1 } },
     { $limit: 500 },
     { $addFields: { questionCount: { $size: { $ifNull: ['$draft.questions', []] } } } },
@@ -128,6 +128,17 @@ export async function createSurvey(userId: string, title: any) {
     revision: 0,
   });
 }
+export async function deleteSurvey(id: string, userId: string, revision: number) {
+  await owned(id, userId);
+  if (!Number.isInteger(revision) || revision < 0) fail('REVISION', '请提供有效的问卷版本号');
+  const s = await Survey.findOneAndUpdate(
+    { _id: id, ownerId: userId, deletedAt: null, revision },
+    { $set: { deletedAt: new Date() }, $inc: { revision: 1 } },
+    { new: true },
+  ).lean();
+  if (!s) throw new DomainError('CONFLICT', '问卷已变化，请刷新列表后重新确认删除', 409);
+  return { ok: true };
+}
 export async function saveDraft(id: string, userId: string, d: Definition, revision: number) {
   const previous = await owned(id, userId);
   if (!d || typeof d !== 'object') fail('SETTINGS', '问卷定义不合法');
@@ -144,7 +155,7 @@ export async function saveDraft(id: string, userId: string, d: Definition, revis
     );
   validateDefinition(definition);
   const s = await Survey.findOneAndUpdate(
-    { _id: id, ownerId: userId, status: 'draft', revision },
+    { _id: id, ownerId: userId, status: 'draft', deletedAt: null, revision },
     { $set: { draft: definition }, $inc: { revision: 1 } },
     { new: true },
   ).lean();
@@ -289,12 +300,13 @@ export async function closeSurvey(id: string, userId: string) {
   return s;
 }
 function ensureOpen(s: any) {
+  if (s?.deletedAt) throw new DomainError('NOT_FOUND', '问卷已删除', 404);
   if (!s || s.status !== 'published') throw new DomainError('CLOSED', '问卷未发布或已关闭', 409);
   if (s.deadlineAt && +s.deadlineAt <= Date.now())
     throw new DomainError('EXPIRED', '问卷已截止', 409);
 }
 export async function publicSurvey(publicId: string, userId: string) {
-  const s = await Survey.findOne({ publicId }).lean();
+  const s = await Survey.findOne({ publicId, deletedAt: null }).lean();
   if (!s) throw new DomainError('NOT_FOUND', '问卷不存在', 404);
   ensureOpen(s);
   const v = await Version.findById(s.publishedVersionId).lean();
@@ -356,6 +368,8 @@ export async function getAttempt(id: string, userId: string) {
     expiresAt: { $gt: new Date() },
   }).lean();
   if (!a) throw new DomainError('NOT_FOUND', '填写记录不存在或已过期', 404);
+  if (!(await Survey.exists({ _id: a.surveyId, deletedAt: null })))
+    throw new DomainError('NOT_FOUND', '问卷已删除', 404);
   const v = await Version.findById(a.surveyVersionId).lean();
   if (!v) fail('VERSION', '问卷版本不存在');
   return { a, d: v.definition as Definition };
@@ -416,6 +430,7 @@ export async function submit(id: string, userId: string, revision: number) {
         {
           _id: a.surveyId,
           status: 'published',
+          deletedAt: null,
           $or: [{ deadlineAt: null }, { deadlineAt: { $gt: new Date() } }],
         },
         { $inc: { submissionSerial: 1 } },

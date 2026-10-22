@@ -8,6 +8,7 @@ export interface SurveySummary {
   draft: Omit<Definition, 'questions'>;
   questionCount: number;
   responseCount: number;
+  revision: number;
   createdAt: string;
   deadlineAt?: string;
 }

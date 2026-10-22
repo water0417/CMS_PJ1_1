@@ -26,6 +26,7 @@ export const Survey = make(
     submissionSerial: { type: Number, default: 0 },
     publishedAt: Date,
     closedAt: Date,
+    deletedAt: Date,
   },
   [[{ publicId: 1 }, { unique: true }], [{ ownerId: 1, createdAt: -1 }]],
 );

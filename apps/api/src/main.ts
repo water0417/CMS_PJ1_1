@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Patch,
+  Delete,
   Body,
   Param,
   Query,
@@ -78,6 +79,9 @@ class Api {
   }
   @Post('surveys') async create(@Req() r: Request, @Body() b: any) {
     return service.createSurvey(await uid(r), b.title);
+  }
+  @Delete('surveys/:id') async remove(@Req() r: Request, @Param('id') id: string, @Body() b: any) {
+    return service.deleteSurvey(id, await uid(r), b?.revision);
   }
   @Get('surveys/:id') async detail(@Req() r: Request, @Param('id') id: string) {
     return service.owned(id, await uid(r));

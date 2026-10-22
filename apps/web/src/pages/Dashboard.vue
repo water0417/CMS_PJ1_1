@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
-import { auth } from '../api';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { auth, api } from '../api';
 import { workspace, refreshSurveys, statusName, type SurveySummary } from '../workspace';
 import ArchiveTitle from '../components/ArchiveTitle.vue';
 defineEmits<{ create: [] }>();
@@ -10,6 +10,28 @@ const router = useRouter(),
   loading = ref(true),
   error = ref(''),
   page = ref(1);
+const deleting = ref<string | null>(null);
+async function remove(s: SurveySummary) {
+  if (deleting.value) return;
+  deleting.value = s._id;
+  try {
+    await ElMessageBox.confirm(
+      `确认从工作区删除“${s.draft.title}”？删除后原填写链接将失效，已有 ${s.responseCount} 份答卷将随问卷隐藏，数据不会永久清空。`,
+      '删除问卷',
+      { confirmButtonText: '确认删除', cancelButtonText: '取消', type: 'warning' },
+    );
+    await api('/surveys/' + s._id, 'DELETE', { revision: s.revision });
+    workspace.surveys = workspace.surveys.filter((item) => item._id !== s._id);
+    ElMessage.success('问卷已从工作区删除');
+  } catch (e: any) {
+    if (e?.message) {
+      ElMessage.error(e.message);
+      if (e.code === 'CONFLICT' || e.code === 'NOT_FOUND') await load();
+    }
+  } finally {
+    deleting.value = null;
+  }
+}
 const filtered = computed(() =>
   workspace.surveys.filter(
     (s) =>
@@ -153,7 +175,7 @@ function setFilter(value: string) {
           </router-link>
           <div class="issue-meta">
             <span>
-              <span class="live-status">{{ statusName(s) }} · </span>
+              <span class="live-status">{{ statusName(s) }} ·</span>
               {{ s.questionCount }} 道题
               <span v-if="s.status !== 'draft'">· {{ s.responseCount }} 份答卷</span>
             </span>
@@ -163,6 +185,13 @@ function setFilter(value: string) {
                 <router-link :to="'/statistics/' + s._id">统计 ↗</router-link>
               </template>
               <router-link v-else :to="'/editor/' + s._id">继续编辑 ↗</router-link>
+              <button
+                :disabled="!!deleting"
+                :aria-label="'删除问卷：' + s.draft.title"
+                @click="remove(s)"
+              >
+                删除
+              </button>
             </div>
           </div>
         </article>
