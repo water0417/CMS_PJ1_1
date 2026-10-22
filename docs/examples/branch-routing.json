@@ -1,0 +1,74 @@
+{
+  "title": "心情与来源调查",
+  "description": "分支题由条件跳转规则自动识别，无需额外显示条件。",
+  "schemaVersion": 1,
+  "routingMode": "exclusive-branches-v1",
+  "allowAnonymous": true,
+  "allowRepeatSubmissions": false,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "text",
+      "title": "今天你想如何介绍自己？",
+      "description": "",
+      "required": true,
+      "options": [],
+      "rows": [],
+      "validation": {},
+      "jumpRules": []
+    },
+    {
+      "id": "q2",
+      "type": "single_choice",
+      "title": "今天的心情是什么？",
+      "description": "",
+      "required": true,
+      "options": [
+        { "id": "a", "label": "快乐" },
+        { "id": "b", "label": "平静" },
+        { "id": "c", "label": "低落" },
+        { "id": "d", "label": "灰暗" }
+      ],
+      "rows": [],
+      "validation": {},
+      "jumpRules": [
+        { "id": "happy", "operator": "eq", "value": "a", "target": "q3" },
+        { "id": "sad", "operator": "eq", "value": "c", "target": "q4" },
+        { "id": "dark", "operator": "eq", "value": "d", "target": "q4" }
+      ]
+    },
+    {
+      "id": "q3",
+      "type": "text",
+      "title": "快乐来源",
+      "description": "",
+      "required": true,
+      "options": [],
+      "rows": [],
+      "validation": {},
+      "jumpRules": []
+    },
+    {
+      "id": "q4",
+      "type": "text",
+      "title": "灰暗原因",
+      "description": "",
+      "required": true,
+      "options": [],
+      "rows": [],
+      "validation": {},
+      "jumpRules": []
+    },
+    {
+      "id": "q5",
+      "type": "text",
+      "title": "还有什么想补充？",
+      "description": "",
+      "required": false,
+      "options": [],
+      "rows": [],
+      "validation": {},
+      "jumpRules": []
+    }
+  ]
+}

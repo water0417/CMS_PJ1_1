@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+test-results/*
+!test-results/release-unit.txt
+!test-results/release-build.txt
+!test-results/release-integration.txt
+!test-results/integration.json
+!test-results/README.md
+.DS_Store
+Thumbs.db

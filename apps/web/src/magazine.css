@@ -1,0 +1,50 @@
+/* Neutral monochrome; custom lettering and editorial survey editions. */
+:root{--paper:#f7f7f7;--line:#c4c4c4;--ink:#222;--blue:#303030}
+.desktop{background-color:#c8c8c8}.window{background:#f7f7f7}.sidebar{background:#e2e2e2}.content{background:#f7f7f7}
+.hero{isolation:isolate;padding:20px 0 23px}
+.hero::before{width:660px;height:280px;max-width:94%;top:50%;left:50%;transform:translate(-50%,-50%);background-image:radial-gradient(circle,#8d8d8d 0.7px,transparent .9px);background-size:10px 10px;opacity:.37;mask-image:radial-gradient(ellipse,#000 18%,transparent 72%);z-index:-1}
+.hero::after{content:'Curiosity';font:italic 155px/1 Georgia,serif;letter-spacing:-9px;color:#222;opacity:.028;position:absolute;left:50%;top:45%;transform:translate(-50%,-50%) rotate(-9deg);pointer-events:none;z-index:-2;white-space:nowrap}
+.hero h1.drawn-title{width:93%;max-width:1070px;height:auto;line-height:0;margin:0 0 13px;font-size:0;letter-spacing:0;color:#171717}
+.drawn-title svg{display:block;width:100%;height:auto;overflow:visible}
+.hero-kicker{margin-bottom:15px}.hero-chinese{font-size:25px;letter-spacing:3px;margin-bottom:10px}.hero p{color:#747474;font-size:11px;margin-bottom:19px;background:#f7f7f799}
+.hero-actions .primary{background:#f8f8f8;color:#252525;border-color:#8d8d8d;box-shadow:3px 3px 0 #dedede}
+.hero-actions .primary:hover{background:#eaeaea}
+.hero-footnote{margin-top:17px;color:#969696}
+.volume{background:#f4f4f4}
+.library{border-top:1px solid #929292;padding-bottom:18px}
+.library-header{margin-top:13px;margin-bottom:13px}.library h2{font-size:16px}
+.cards{gap:22px}
+.card,.card:first-child,.card:last-child{height:184px;display:flex;flex-direction:column;justify-content:flex-start;border:0;border-radius:0;background:transparent;padding:0;box-shadow:none;overflow:visible;transition:transform .2s}
+.card:hover{background:transparent;transform:translateY(-3px);border:0;box-shadow:none}
+.issue-cover{height:126px;flex:0 0 126px;width:100%;background:#e7e7e7;overflow:hidden;position:relative;isolation:isolate;padding:11px 13px;color:#323232;border-top:1px solid #8a8a8a}
+.issue-top{display:flex;justify-content:space-between;align-items:center;font:6px 'Courier New',monospace;letter-spacing:1.1px;position:relative;z-index:2}
+.cover-heading{font:30px/.88 Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-1.2px;margin:17px 0 0;position:relative;z-index:2;max-width:90%}
+.cover-heading span{display:block}.cover-bottom{position:absolute;bottom:10px;left:14px;font:6px 'Courier New',monospace;letter-spacing:1px;color:inherit;opacity:.65}
+.cover-art{position:absolute;inset:0;z-index:0;pointer-events:none}
+.issue-0 .cover-art::before{content:'';width:109px;height:109px;border:1px solid #939393;border-radius:50%;position:absolute;right:23px;top:17px;transform:rotate(-25deg) scaleX(.58)}
+.issue-0 .cover-art::after{content:'';position:absolute;right:17px;top:0;bottom:0;width:102px;background:repeating-linear-gradient(90deg,transparent 0 16px,#bcbcbc66 16px 17px);transform:skew(-22deg)}
+.issue-1 .issue-cover{background:#d5d5d5;color:#202020;border-top-color:#777}
+.issue-1 .cover-heading{font-style:italic;font-size:31px;line-height:.9;letter-spacing:-1.5px}
+.issue-1 .cover-art::before{content:'';position:absolute;right:22px;top:28px;width:79px;height:79px;border-radius:50%;background:#ababab}
+.issue-1 .cover-art::after{content:'';position:absolute;right:47px;top:0;bottom:0;border-left:1px solid #f3f3f3;transform:rotate(35deg)}
+.issue-2 .issue-cover{background:#363636;color:#e8e8e8;border-top-color:#363636}
+.issue-2 .cover-heading{font-size:29px;font-style:normal;line-height:.93}
+.issue-2 .cover-art::before{content:'?';position:absolute;right:20px;top:-35px;font:181px/1 Georgia,serif;color:#535353;transform:rotate(13deg)}
+.card h3{font:500 12px/1.5 'Microsoft YaHei',sans-serif;letter-spacing:.2px;color:#353535;margin:10px 0 6px;padding:0;display:block;min-height:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.issue-meta{display:flex;justify-content:space-between;align-items:center;gap:7px;font:9px 'Microsoft YaHei',sans-serif;color:#8b8b8b;width:100%;margin-top:auto}
+.issue-action{color:#555;white-space:nowrap;font-size:9px}
+.card:hover .issue-action{color:#000}.card:hover .issue-cover{filter:contrast(1.04)}
+.empty{height:184px}
+@media(min-width:1500px){.card,.card:first-child,.card:last-child{height:220px}.issue-cover{height:158px;flex-basis:158px;padding:14px 17px}.cover-heading{font-size:39px;margin-top:23px}.issue-1 .cover-heading{font-size:40px}.issue-2 .cover-heading{font-size:38px}.issue-top{font-size:7px}.card h3{font-size:14px}.issue-meta,.issue-action{font-size:10px}.hero h1.drawn-title{width:95%;max-width:1160px}.issue-0 .cover-art::before{width:140px;height:140px;right:38px}.issue-2 .cover-art::before{font-size:218px}.issue-1 .cover-art::before{width:100px;height:100px;right:35px;top:39px}}
+@media(max-height:750px){.hero{padding:17px 0 21px}.hero h1.drawn-title{max-width:900px;width:91%;margin-bottom:10px}.hero-kicker{margin-bottom:12px}.hero-chinese{font-size:23px;margin-bottom:9px}.hero p{font-size:10px;margin-bottom:16px}.hero-footnote{margin-top:14px}.card,.card:first-child,.card:last-child{height:169px}.issue-cover{height:112px;flex-basis:112px}.library{padding-bottom:15px}.cover-heading{font-size:27px;margin-top:15px}.issue-1 .cover-heading{font-size:28px}.issue-2 .cover-heading{font-size:26px}.issue-0 .cover-art::before{height:95px;width:95px;right:19px;top:12px}.issue-2 .cover-art::before{font-size:165px}.issue-1 .cover-art::before{height:68px;width:68px;top:26px}}
+@media(max-width:1000px){.cards{gap:14px}.hero h1.drawn-title{width:100%}.issue-top{font-size:5px;letter-spacing:.5px}.issue-cover{padding:10px}.cover-heading{font-size:25px;max-width:100%}.issue-1 .cover-heading{font-size:25px}.issue-2 .cover-heading{font-size:24px}.cover-bottom{left:10px}.card h3{font-size:11px}.issue-meta,.issue-action{font-size:8px}.issue-0 .cover-art::before{right:0}.issue-1 .cover-art::before{right:3px}.issue-2 .cover-art::before{right:0}.hero::after{font-size:115px}}
+@media(max-width:700px){.hero{padding:20px 0}.hero h1.drawn-title{width:100%;margin-bottom:17px}.hero-kicker{font-size:6px;letter-spacing:0;margin-bottom:18px}.hero-chinese{font-size:18px;letter-spacing:0;margin-bottom:12px}.hero p{font-size:10px;line-height:1.9;margin-bottom:20px}.hero::before{height:240px;opacity:.28;background-size:8px 8px}.hero::after{font-size:77px;letter-spacing:-5px}.hero-footnote{font-size:6px}.cards{gap:13px}.card,.card:first-child,.card:last-child{height:77px;display:grid;grid-template-columns:92px minmax(0,1fr);grid-template-rows:1fr 1fr;column-gap:11px;row-gap:3px;border:0;border-bottom:1px solid #d4d4d4;padding:0 0 11px;position:relative}.card:last-child{border-bottom:0}.issue-cover{grid-row:1/3;grid-column:1;height:65px;min-width:0;flex-basis:auto;padding:6px 7px}.issue-top{font-size:4px;letter-spacing:0}.issue-top span:last-child{display:none}.cover-heading,.issue-1 .cover-heading,.issue-2 .cover-heading{font-size:15px;line-height:.93;margin-top:10px;letter-spacing:-.4px}.cover-bottom{font-size:4px;left:7px;bottom:5px;letter-spacing:.2px}.issue-0 .cover-art::before{width:58px;height:58px;right:-11px;top:10px}.issue-0 .cover-art::after{width:38px;right:0;background-size:auto}.issue-1 .cover-art::before{width:39px;height:39px;right:-9px;top:20px}.issue-1 .cover-art::after{right:16px}.issue-2 .cover-art::before{font-size:95px;top:-9px;right:-3px}.card h3{grid-column:2;grid-row:1;margin:4px 0 0;font-size:11px;white-space:normal;line-height:1.6;max-height:36px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.issue-meta{grid-column:2;grid-row:2;align-self:end;font-size:8px;display:block;line-height:1.7;margin-bottom:2px}.issue-action{display:block;font-size:8px;color:#555}.library{padding-bottom:8px}.empty{height:257px}.card:hover{transform:none}.library-header{margin-bottom:13px}.hero-actions .primary{min-width:120px}.hero-number,.editorial-mark{display:none}}
+@media(max-height:580px){.hero h1.drawn-title{width:73%;max-width:700px;margin-bottom:8px}.hero-chinese{font-size:17px}.hero p{display:none}.hero-footnote{display:none}.card,.card:first-child,.card:last-child{height:125px}.issue-cover{height:78px;flex-basis:78px;padding:7px 10px}.cover-heading,.issue-1 .cover-heading,.issue-2 .cover-heading{font-size:20px;margin-top:10px}.cover-bottom{font-size:5px;bottom:6px}.issue-0 .cover-art::before{width:65px;height:65px}.issue-2 .cover-art::before{font-size:120px;top:-27px}.issue-1 .cover-art::before{height:45px;width:45px;top:20px}.card h3{font-size:10px;margin:8px 0 4px}.issue-meta,.issue-action{font-size:8px}.hero::before{height:170px}}
+/* Center the masthead lower after removing the redundant hero actions. */
+.hero{padding-top:65px;padding-bottom:20px}
+.hero::before{top:56%}
+.hero::after{top:53%}
+.hero-footnote{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);margin:0;white-space:nowrap}
+@media(max-height:750px){.hero{padding-top:51px;padding-bottom:30px}}
+@media(max-width:700px){.hero{padding-top:52px;padding-bottom:30px}.hero-footnote{bottom:16px}}
+@media(max-height:580px){.hero{padding-top:25px;padding-bottom:17px}.hero-footnote{display:none}}

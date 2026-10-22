@@ -1,0 +1,28 @@
+
+> survey-studio@1.0.0 build
+> npm run build -w apps/api && npm run build -w apps/web
+
+
+> @survey/api@1.0.0 build
+> tsc -p tsconfig.json
+
+
+> @survey/web@1.0.0 build
+> vue-tsc --noEmit && vite build
+
+vite v6.4.5 building for production...
+transforming...
+✓ 1640 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.58 kB │ gzip:   0.36 kB
+dist/assets/index-BpS4egWH.css        457.01 kB │ gzip:  66.41 kB
+dist/assets/index-nT7O_3aD.js          76.83 kB │ gzip:  25.82 kB
+dist/assets/vue-Df91HTOu.js           110.22 kB │ gzip:  42.85 kB
+dist/assets/element-plus-COnU1Rgz.js  939.90 kB │ gzip: 302.46 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 8.74s
